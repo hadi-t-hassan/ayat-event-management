@@ -1,9 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import type { AuthState, LoginCredentials, RegisterData, User } from '../types/auth';
 
-const API_URL = 'http://localhost:8000/api';
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
@@ -37,9 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await axios.get<User>(`${API_URL}/auth/me/`, {
-        headers: { Authorization: `Bearer ${state.accessToken}` },
-      });
+      const response = await api.get<User>('/auth/me/');
       setState(prev => ({ ...prev, user: response.data, isAuthenticated: true }));
     } catch (error) {
       logout();
@@ -48,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (credentials: LoginCredentials) => {
     try {
-      const response = await axios.post(`${API_URL}/auth/login/`, credentials);
+      const response = await api.post('/auth/login/', credentials);
       const { access, refresh } = response.data;
       localStorage.setItem('accessToken', access);
       localStorage.setItem('refreshToken', refresh);
@@ -65,7 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const register = async (data: RegisterData) => {
     try {
-      await axios.post(`${API_URL}/auth/register/`, data);
+      await api.post('/auth/register/', data);
       await login({ username: data.username, password: data.password });
     } catch (error) {
       throw error;

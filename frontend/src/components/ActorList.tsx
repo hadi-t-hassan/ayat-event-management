@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from './ui/Button';
 import Card from './ui/Card';
@@ -38,9 +38,7 @@ export default function ActorList() {
 
   const fetchActors = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/auth/actors/', {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
+      const response = await api.get('/auth/actors/');
       setActors(response.data);
       setLoading(false);
     } catch (err) {
@@ -56,9 +54,7 @@ export default function ActorList() {
   const handleDelete = async (id: number) => {
     if (window.confirm(t('actor.confirmDelete'))) {
       try {
-        await axios.delete(`http://localhost:8000/api/auth/actors/${id}/`, {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
+        await api.delete(`/auth/actors/${id}/`);
         fetchActors();
       } catch (err) {
         setError(t('common.error'));
