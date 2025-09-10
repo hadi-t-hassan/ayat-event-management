@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from './ui/Button';
 import Modal from './ui/Modal';
@@ -40,7 +40,7 @@ interface Party {
 
 export default function PartyManagement() {
   const { t } = useTranslation();
-  const { accessToken } = useAuth();
+  useAuth(); // Keep the hook for authentication context
   const [parties, setParties] = useState<Party[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -61,9 +61,7 @@ export default function PartyManagement() {
   const fetchParties = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/api/auth/parties/', {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
+      const response = await api.get('/auth/parties/');
       setParties(response.data.results || response.data);
     } catch (err: any) {
       setError(t('common.error'));
@@ -81,9 +79,7 @@ export default function PartyManagement() {
     if (!deletingParty) return;
     
     try {
-      await axios.delete(`http://localhost:8000/api/auth/parties/${deletingParty.id}/`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
+      await api.delete(`/auth/parties/${deletingParty.id}/`);
       setParties(parties.filter(p => p.id !== deletingParty.id));
       setDeletingParty(null);
     } catch (err) {
@@ -98,11 +94,7 @@ export default function PartyManagement() {
 
   const handleStatusChange = async (party: Party, newStatus: string) => {
     try {
-      await axios.patch(
-        `http://localhost:8000/api/auth/parties/${party.id}/`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      await api.patch(`/auth/parties/${party.id}/`, { status: newStatus });
       
       setParties(parties.map(p => 
         p.id === party.id ? { ...p, status: newStatus } : p

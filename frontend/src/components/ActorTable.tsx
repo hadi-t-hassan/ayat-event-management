@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from './ui/Button';
 import Card from './ui/Card';
@@ -43,8 +43,7 @@ export default function ActorTable({ onEdit }: ActorTableProps) {
   const fetchActors = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/api/auth/actors/', {
-        headers: { Authorization: `Bearer ${accessToken}` },
+      const response = await api.get('/auth/actors/', {
         params: { name: searchTerm }
       });
       setActors(response.data);

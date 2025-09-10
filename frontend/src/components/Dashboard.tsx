@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Card from './ui/Card';
 // Removed unused recharts imports
@@ -41,10 +41,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:8000/api/auth/dashboard/stats/',
-          { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
+        const response = await api.get('/auth/dashboard/stats/');
         setStats(response.data);
         setLoading(false);
       } catch (error) {

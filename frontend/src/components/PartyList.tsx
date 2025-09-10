@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Card from './ui/Card';
 import type { Party, PartyFilters } from '../types/party';
@@ -12,7 +12,7 @@ interface PartyListProps {
 
 export default function PartyList({ onEdit, onAddNew }: PartyListProps) {
   const { t } = useTranslation();
-  const { accessToken } = useAuth();
+  useAuth(); // Keep the hook for authentication context
   const [parties, setParties] = useState<Party[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -46,9 +46,7 @@ export default function PartyList({ onEdit, onAddNew }: PartyListProps) {
   const fetchParties = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/api/auth/parties/', {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
+      const response = await api.get('/auth/parties/');
       setParties(response.data.results || response.data);
     } catch (err: any) {
       setError(t('common.error'));

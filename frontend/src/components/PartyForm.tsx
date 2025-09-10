@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from './ui/Button';
 import Card from './ui/Card';
@@ -86,9 +86,7 @@ export default function PartyForm({ editParty, onSubmitSuccess }: PartyFormProps
   useEffect(() => {
     const fetchActors = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/auth/actors/', {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
+        const response = await api.get('/auth/actors/');
         setActors(response.data);
       } catch (err) {
         setError(t('common.error'));
@@ -110,8 +108,8 @@ export default function PartyForm({ editParty, onSubmitSuccess }: PartyFormProps
     try {
       setShowConfirmDialog(false);
       const url = editParty
-        ? `http://localhost:8000/api/auth/parties/${editParty.id}/`
-        : 'http://localhost:8000/api/auth/parties/';
+        ? `/auth/parties/${editParty.id}/`
+        : '/auth/parties/';
       
       const method = editParty ? 'put' : 'post';
       
@@ -156,9 +154,8 @@ export default function PartyForm({ editParty, onSubmitSuccess }: PartyFormProps
       });
       
       try {
-        const response = await axios[method](url, 
-          { ...formData, duration: formattedDuration, songs: filteredSongs },
-          { headers: { Authorization: `Bearer ${accessToken}` } }
+        const response = await api[method](url, 
+          { ...formData, duration: formattedDuration, songs: filteredSongs }
         );
         console.log('Server response:', response.data);
       } catch (error: any) {

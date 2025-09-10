@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Card from './ui/Card';
 
@@ -26,9 +26,7 @@ export default function ActorDashboard() {
   useEffect(() => {
     const fetchParties = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auth/actors/${user?.actor_profile}/parties/`, {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
+        const response = await api.get(`/auth/actors/${user?.actor_profile}/parties/`);
         const parties = response.data;
         
         // Filter upcoming parties (not completed)

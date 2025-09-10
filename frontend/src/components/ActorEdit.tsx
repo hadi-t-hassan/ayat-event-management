@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import ActorForm from './ActorForm';
 
@@ -35,9 +35,7 @@ export default function ActorEdit() {
   useEffect(() => {
     const fetchActor = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auth/actors/${id}/`, {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
+        const response = await api.get(`/auth/actors/${id}/`);
         setActor(response.data);
       } catch (err) {
         setError(t('common.error'));

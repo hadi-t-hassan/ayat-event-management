@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from './ui/Button';
 import Card from './ui/Card';
@@ -51,7 +51,7 @@ interface ActorFormProps {
 
 export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
   const { t } = useTranslation();
-  const { accessToken } = useAuth();
+  useAuth(); // Keep the hook for authentication context
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<ActorFormData>({
     name: '',
@@ -118,22 +118,10 @@ export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
 
       if (actor) {
         // Update existing actor
-        await axios.patch(
-          `http://localhost:8000/api/auth/actors/${actor.id}/`,
-          data,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          }
-        );
+        await api.patch(`/auth/actors/${actor.id}/`, data);
       } else {
         // Create new actor
-        await axios.post(
-          'http://localhost:8000/api/auth/actors/',
-          data,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          }
-        );
+        await api.post('/auth/actors/', data);
       }
 
       setSuccess(true);

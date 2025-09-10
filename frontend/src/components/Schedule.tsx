@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../services/api';
 import Card from './ui/Card';
 import Button from './ui/Button';
 
@@ -31,7 +31,7 @@ interface Party {
 
 export default function Schedule() {
   const { t } = useTranslation();
-  const { user, accessToken } = useAuth();
+  const { user } = useAuth();
   const [parties, setParties] = useState<Party[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -56,9 +56,7 @@ export default function Schedule() {
         params.append('status', filter);
       }
       
-      const response = await axios.get(`http://localhost:8000/api/auth/parties/?${params}`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
+      const response = await api.get(`/auth/parties/?${params}`);
       
       setParties(response.data.results || response.data);
     } catch (err: any) {

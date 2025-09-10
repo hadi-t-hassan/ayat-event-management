@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import Button from './ui/Button';
 
@@ -16,7 +16,7 @@ interface PartyStatusManagerProps {
 
 export default function PartyStatusManager({ party, onStatusChange }: PartyStatusManagerProps) {
   const { t } = useTranslation();
-  const { accessToken } = useAuth();
+  useAuth(); // Keep the hook for authentication context
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,11 +25,7 @@ export default function PartyStatusManager({ party, onStatusChange }: PartyStatu
       setLoading(true);
       setError('');
       
-      await axios.patch(
-        `http://localhost:8000/api/auth/parties/${party.id}/`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      await api.patch(`/auth/parties/${party.id}/`, { status: newStatus });
       
       onStatusChange();
     } catch (err) {
