@@ -115,13 +115,16 @@ STATICFILES_DIRS = [
 # Configure whitenoise for serving static files
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-# Configure whitenoise
+# Static files configuration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_INDEX_FILE = True
 WHITENOISE_ROOT = BASE_DIR / 'static'
-WHITENOISE_MIMETYPES = {
-    '.js': 'application/javascript',
-    '.css': 'text/css',
-}
+
+# Security headers
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'same-origin'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

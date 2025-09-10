@@ -6,11 +6,19 @@ export default defineConfig({
   plugins: [react()],
   base: '/static/',
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
     manifest: true,
     rollupOptions: {
-      output: {
-        manualChunks: undefined,
+      input: {
+        main: './index.html',
       },
-    },
+      output: {
+        entryFileNames: `assets/[name].[hash].js`,
+        chunkFileNames: `assets/[name].[hash].js`,
+        assetFileNames: `assets/[name].[hash].[ext]`
+      }
+    }
   },
 })
