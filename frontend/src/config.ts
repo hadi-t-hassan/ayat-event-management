@@ -1,6 +1,8 @@
-const API_URL = import.meta.env.DEV 
-  ? 'http://localhost:8000/api'
-  : 'https://pingtech.pythonanywhere.com/api';
+const API_URL = import.meta.env.VITE_API_URL || (
+  import.meta.env.DEV 
+    ? 'http://localhost:8000/api'
+    : 'https://pingtech.pythonanywhere.com/api'
+);
 
 console.log('Current API URL:', API_URL); // For debugging
 
