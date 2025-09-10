@@ -1,8 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL;
-
-if (!API_URL) {
-  throw new Error('VITE_API_URL environment variable is not set');
-}
+// Determine API URL based on current hostname
+const API_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:8000/api'
+  : `https://${window.location.hostname}/api`;
 
 console.log('Current API URL:', API_URL); // For debugging
 
