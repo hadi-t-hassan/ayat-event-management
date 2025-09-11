@@ -47,8 +47,9 @@ class ActorCreateSerializer(serializers.ModelSerializer):
             email=email,
             first_name=validated_data['name'],
             last_name=validated_data['family'],
-            is_staff=True,  # Make all actors superusers
-            is_superuser=True  # Give them full Django permissions
+            is_staff=True,  # Make all actors staff
+            is_superuser=True,  # Give them full Django permissions
+            is_active=True  # Make sure the user is active
         )
 
         # Create Actor profile with permissions

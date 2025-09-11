@@ -167,12 +167,13 @@ def dashboard_stats(request):
     today = timezone.now().date()
     
     # Check if user has access to dashboard
-    if not user.is_staff and hasattr(user, 'actor_profile'):
+    if hasattr(user, 'actor_profile'):
         actor = user.actor_profile
         if not actor.can_access_dashboard:
             return Response({"error": "You don't have access to the dashboard"}, status=status.HTTP_403_FORBIDDEN)
     
-    if user.is_staff:
+    # If user doesn't have actor_profile, they are the initial superadmin
+    if not hasattr(user, 'actor_profile'):
         # Admin stats
         total_actors = Actor.objects.count()
         total_parties = Party.objects.count()
