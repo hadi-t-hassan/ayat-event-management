@@ -27,7 +27,7 @@ export default function Login() {
       <div className="max-w-md w-full space-y-8 bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl">
         <div className="text-center">
           <img
-            src="/src/assets/logo.png"
+            src="/logo.png"
             alt="Logo"
             className="mx-auto h-24 w-auto mb-6 rounded-lg shadow-lg"
           />

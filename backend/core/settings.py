@@ -112,6 +112,12 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# Additional static files configuration
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
 # Configure whitenoise for serving static files
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
