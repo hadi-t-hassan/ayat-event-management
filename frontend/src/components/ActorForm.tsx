@@ -305,7 +305,7 @@ export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
 
         {/* Permissions */}
         <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-4">{t('actor.permissions')}</h3>
+          <h3 className="text-lg font-semibold mb-4">{t('actor.permissions.title')}</h3>
           <div className="space-y-3">
             <div className="flex items-center">
               <input
@@ -386,7 +386,7 @@ export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
                 onChange={() => handlePermissionChange('can_access_dashboard')}
               />
               <label htmlFor="can_access_dashboard" className="ml-2 text-gray-700">
-                {t('actor.pagePermissions.dashboard', 'Dashboard')}
+                {t('actor.pageAccess.dashboard', 'Dashboard')}
               </label>
             </div>
             <div className="flex items-center">
@@ -398,7 +398,7 @@ export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
                 onChange={() => handlePermissionChange('can_access_actors')}
               />
               <label htmlFor="can_access_actors" className="ml-2 text-gray-700">
-                {t('actor.pagePermissions.actors', 'Actors')}
+                {t('actor.pageAccess.actors', 'Actors')}
               </label>
             </div>
             <div className="flex items-center">
@@ -410,7 +410,7 @@ export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
                 onChange={() => handlePermissionChange('can_access_parties')}
               />
               <label htmlFor="can_access_parties" className="ml-2 text-gray-700">
-                {t('actor.pagePermissions.parties', 'Parties')}
+                {t('actor.pageAccess.parties', 'Parties')}
               </label>
             </div>
             <div className="flex items-center">
@@ -422,7 +422,7 @@ export default function ActorForm({ actor, onSuccess }: ActorFormProps) {
                 onChange={() => handlePermissionChange('can_access_schedule')}
               />
               <label htmlFor="can_access_schedule" className="ml-2 text-gray-700">
-                {t('actor.pagePermissions.schedule', 'Schedule')}
+                {t('actor.pageAccess.schedule', 'Schedule')}
               </label>
             </div>
           </div>
