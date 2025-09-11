@@ -116,10 +116,41 @@ class IsAdminOrActorWithPartyPermission(permissions.BasePermission):
 import logging
 logger = logging.getLogger(__name__)
 
+class IsAdminOrActorWithSchedulePermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Only allow access if user has actor_profile (is an actor)
+        # or is the initial superadmin (no actor_profile)
+        if not hasattr(request.user, 'actor_profile'):
+            return True  # This is the initial superadmin
+            
+        actor = request.user.actor_profile
+        
+        # Check if actor has access to either parties or schedule page
+        if not (actor.can_access_parties or actor.can_access_schedule):
+            return False
+            
+        # If they have access to the page, they can do everything on that page
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        # Only allow access if user has actor_profile (is an actor)
+        # or is the initial superadmin (no actor_profile)
+        if not hasattr(request.user, 'actor_profile'):
+            return True  # This is the initial superadmin
+            
+        actor = request.user.actor_profile
+        
+        # Check if actor has access to either parties or schedule page
+        if not (actor.can_access_parties or actor.can_access_schedule):
+            return False
+            
+        # If they have access to the page, they can do everything on that page
+        return True
+
 class PartyViewSet(viewsets.ModelViewSet):
     queryset = Party.objects.all()
     serializer_class = PartySerializer
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrActorWithPartyPermission]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrActorWithSchedulePermission]
 
     def create(self, request, *args, **kwargs):
         logger.error(f"Received party data: {request.data}")
@@ -136,8 +167,8 @@ class PartyViewSet(viewsets.ModelViewSet):
         # If this is an actor (not the initial superadmin)
         if hasattr(user, 'actor_profile'):
             actor = user.actor_profile
-            # If they don't have access to the parties page, return empty queryset
-            if not actor.can_access_parties:
+            # If they don't have access to either parties or schedule page, return empty queryset
+            if not (actor.can_access_parties or actor.can_access_schedule):
                 return Party.objects.none()
         
         # Apply search filters
